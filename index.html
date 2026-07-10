@@ -21,6 +21,9 @@
             --selected-text: #6b4300;
             --text-color: #1f2937;
             --muted-text: #5f6b7a;
+            --section-background: #f8fafc;
+            --summary-background: #eef4f8;
+            --divider-color: #d7dee7;
         }
 
         * {
@@ -39,7 +42,7 @@
         }
 
         .chart-card {
-            max-width: 950px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 28px;
             background: var(--card-background);
@@ -54,24 +57,63 @@
         }
 
         .intro {
-            max-width: 700px;
-            margin: 0 auto 24px;
-            text-align: center;
+            max-width: 730px;
+            margin: 0 auto 26px;
             color: var(--muted-text);
             line-height: 1.5;
+            text-align: center;
+        }
+
+        .chart-section {
+            margin-top: 28px;
+            padding: 24px;
+            background: var(--section-background);
+            border: 1px solid var(--divider-color);
+            border-radius: 14px;
+        }
+
+        .chart-section:first-of-type {
+            margin-top: 0;
+        }
+
+        .chart-section.hidden {
+            display: none;
+        }
+
+        .section-title {
+            margin: 0 0 6px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .section-description {
+            margin: 0 auto 20px;
+            color: var(--muted-text);
+            line-height: 1.45;
+            text-align: center;
         }
 
         .arch-title {
-            margin: 28px 0 12px;
+            margin: 24px 0 12px;
             text-align: center;
-            font-size: 18px;
+            font-size: 17px;
         }
 
         .arch {
             display: grid;
-            grid-template-columns: repeat(16, minmax(40px, 1fr));
             gap: 7px;
             align-items: center;
+        }
+
+        .permanent-arch {
+            grid-template-columns: repeat(16, minmax(40px, 1fr));
+        }
+
+        .primary-arch {
+            max-width: 690px;
+            margin-right: auto;
+            margin-left: auto;
+            grid-template-columns: repeat(10, minmax(48px, 1fr));
         }
 
         .tooth {
@@ -126,13 +168,14 @@
         }
 
         .midline {
-            border-left: 3px solid #334155;
+            border-left-width: 4px;
+            border-left-color: #334155;
         }
 
         .summary {
-            margin-top: 32px;
-            padding: 18px;
-            background: #eef4f8;
+            margin-top: 30px;
+            padding: 16px;
+            background: var(--summary-background);
             border-radius: 10px;
             text-align: center;
         }
@@ -142,12 +185,25 @@
             font-weight: 700;
         }
 
-        #selected-list {
+        .selected-list {
             font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .no-selection-message {
+            display: none;
+            margin: 20px 0 0;
+            padding: 16px;
+            background: #fff8dd;
+            border: 1px solid #e6cf76;
+            border-radius: 10px;
+            line-height: 1.5;
+            text-align: center;
         }
 
         .notice {
-            margin-top: 22px;
+            max-width: 800px;
+            margin: 24px auto 0;
             color: var(--muted-text);
             font-size: 13px;
             line-height: 1.5;
@@ -159,13 +215,22 @@
             font-weight: 700;
         }
 
-        @media (max-width: 780px) {
+        @media (max-width: 820px) {
             .chart-card {
                 padding: 20px 12px;
             }
 
-            .arch {
+            .chart-section {
+                padding: 20px 10px;
+            }
+
+            .permanent-arch {
                 grid-template-columns: repeat(8, minmax(34px, 1fr));
+                row-gap: 18px;
+            }
+
+            .primary-arch {
+                grid-template-columns: repeat(5, minmax(42px, 1fr));
                 row-gap: 18px;
             }
 
@@ -175,7 +240,31 @@
             }
 
             .midline {
-                border-left: 2px solid #334155;
+                border-left-width: 3px;
+            }
+        }
+
+        @media (max-width: 460px) {
+            body {
+                padding: 12px 8px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .section-title {
+                font-size: 21px;
+            }
+
+            .tooth {
+                min-height: 58px;
+                font-size: 13px;
+            }
+
+            .permanent-arch,
+            .primary-arch {
+                gap: 5px;
             }
         }
     </style>
@@ -186,34 +275,115 @@
         <h1>Treatment Tooth Chart</h1>
 
         <p class="intro">
-            The highlighted teeth correspond to the tooth numbers listed
-            in your proposed dental treatment plan.
+            The highlighted teeth correspond to the tooth identifiers
+            listed in the proposed dental treatment plan.
         </p>
 
-        <h2 class="arch-title">Upper teeth</h2>
-
+        <!-- Primary teeth appear first because most patients are children. -->
         <section
-            id="upper-arch"
-            class="arch upper"
-            aria-label="Upper permanent teeth"
-        ></section>
+            id="primary-section"
+            class="chart-section"
+            aria-labelledby="primary-heading"
+        >
+            <h2
+                id="primary-heading"
+                class="section-title"
+            >
+                Primary Teeth
+            </h2>
 
-        <h2 class="arch-title">Lower teeth</h2>
+            <p class="section-description">
+                Primary, or baby, teeth use the letters A through T.
+            </p>
 
-        <section
-            id="lower-arch"
-            class="arch lower"
-            aria-label="Lower permanent teeth"
-        ></section>
+            <h3 class="arch-title">Upper primary teeth</h3>
 
-        <section class="summary">
-            <div class="summary-heading">Highlighted teeth</div>
-            <div id="selected-list">None selected</div>
+            <div
+                id="primary-upper-arch"
+                class="arch primary-arch upper"
+                aria-label="Upper primary teeth"
+            ></div>
+
+            <h3 class="arch-title">Lower primary teeth</h3>
+
+            <div
+                id="primary-lower-arch"
+                class="arch primary-arch lower"
+                aria-label="Lower primary teeth"
+            ></div>
+
+            <section class="summary">
+                <div class="summary-heading">
+                    Highlighted primary teeth
+                </div>
+
+                <div
+                    id="primary-selected-list"
+                    class="selected-list"
+                >
+                    None selected
+                </div>
+            </section>
         </section>
 
+        <section
+            id="permanent-section"
+            class="chart-section"
+            aria-labelledby="permanent-heading"
+        >
+            <h2
+                id="permanent-heading"
+                class="section-title"
+            >
+                Permanent Teeth
+            </h2>
+
+            <p class="section-description">
+                Permanent, or adult, teeth use the numbers 1 through 32.
+            </p>
+
+            <h3 class="arch-title">Upper permanent teeth</h3>
+
+            <div
+                id="permanent-upper-arch"
+                class="arch permanent-arch upper"
+                aria-label="Upper permanent teeth"
+            ></div>
+
+            <h3 class="arch-title">Lower permanent teeth</h3>
+
+            <div
+                id="permanent-lower-arch"
+                class="arch permanent-arch lower"
+                aria-label="Lower permanent teeth"
+            ></div>
+
+            <section class="summary">
+                <div class="summary-heading">
+                    Highlighted permanent teeth
+                </div>
+
+                <div
+                    id="permanent-selected-list"
+                    class="selected-list"
+                >
+                    None selected
+                </div>
+            </section>
+        </section>
+
+        <p
+            id="no-selection-message"
+            class="no-selection-message"
+        >
+            No teeth were included in this link. Add primary teeth using
+            <strong>?primary=A,B,T</strong>, permanent teeth using
+            <strong>?permanent=3,14,19</strong>, or include both parameters.
+        </p>
+
         <p class="notice">
-            This diagram is a general tooth-numbering reference. It is not
-            a patient-specific clinical chart and does not independently
+            This diagram is a general tooth-identification reference. It is
+            not a patient-specific clinical chart and does not independently
             describe the exact diagnosis, procedure, tooth surface, or
             condition being treated. Refer to the written treatment plan
             provided by your dental provider.
@@ -224,34 +394,67 @@
         "use strict";
 
         /*
-         * Universal tooth numbering:
+         * Example URL:
          *
-         * Upper arch:
-         * 1 through 16
+         * ?permanent=3,14,19&primary=A,B,T
          *
-         * Lower arch:
-         * 32 through 17
+         * Primary teeth:
+         * Upper arch: A through J
+         * Lower arch: T through K
          *
-         * The reversed lower sequence makes the diagram match the usual
-         * patient-facing orientation of a Universal Numbering chart.
+         * Permanent teeth:
+         * Upper arch: 1 through 16
+         * Lower arch: 32 through 17
          */
 
-        const upperTeeth = [
+        const primaryUpperTeeth = [
+            "A", "B", "C", "D", "E",
+            "F", "G", "H", "I", "J"
+        ];
+
+        const primaryLowerTeeth = [
+            "T", "S", "R", "Q", "P",
+            "O", "N", "M", "L", "K"
+        ];
+
+        const permanentUpperTeeth = [
             1, 2, 3, 4, 5, 6, 7, 8,
             9, 10, 11, 12, 13, 14, 15, 16
         ];
 
-        const lowerTeeth = [
+        const permanentLowerTeeth = [
             32, 31, 30, 29, 28, 27, 26, 25,
             24, 23, 22, 21, 20, 19, 18, 17
         ];
 
-        function readSelectedTeeth() {
-            const parameters = new URLSearchParams(window.location.search);
-            const rawValue = parameters.get("teeth") ?? "";
+        function splitParameterValue(rawValue) {
+            return rawValue
+                .split(/[,\s]+/)
+                .map(value => value.trim())
+                .filter(value => value !== "");
+        }
 
-            const values = rawValue
-                .split(/[,\-\s]+/)
+        function readPrimaryTeeth(parameters) {
+            const rawValue = parameters.get("primary") ?? "";
+
+            const validPrimaryTeeth = new Set([
+                "A", "B", "C", "D", "E",
+                "F", "G", "H", "I", "J",
+                "K", "L", "M", "N", "O",
+                "P", "Q", "R", "S", "T"
+            ]);
+
+            const selectedTeeth = splitParameterValue(
+                rawValue.toUpperCase()
+            ).filter(value => validPrimaryTeeth.has(value));
+
+            return [...new Set(selectedTeeth)];
+        }
+
+        function readPermanentTeeth(parameters) {
+            const rawValue = parameters.get("permanent") ?? "";
+
+            const selectedTeeth = splitParameterValue(rawValue)
                 .map(value => Number.parseInt(value, 10))
                 .filter(value =>
                     Number.isInteger(value) &&
@@ -259,29 +462,41 @@
                     value <= 32
                 );
 
-            return [...new Set(values)].sort((a, b) => a - b);
+            return [...new Set(selectedTeeth)]
+                .sort((a, b) => a - b);
         }
 
-        function createToothElement(toothNumber, selectedTeeth, index) {
+        function createToothElement(
+            toothIdentifier,
+            selectedTeeth,
+            index,
+            centerIndex
+        ) {
             const element = document.createElement("div");
 
             element.className = "tooth";
-            element.textContent = toothNumber;
-            element.dataset.tooth = String(toothNumber);
+            element.textContent = String(toothIdentifier);
+            element.dataset.tooth = String(toothIdentifier);
+
             element.setAttribute(
                 "aria-label",
-                `Tooth number ${toothNumber}`
+                `Tooth ${toothIdentifier}`
             );
 
             /*
-             * Add a visible center divider between teeth 8 and 9
-             * and between teeth 25 and 24.
+             * Add a visual center divider between the two front teeth.
+             *
+             * Primary arches:
+             * Divider before the sixth item.
+             *
+             * Permanent arches:
+             * Divider before the ninth item.
              */
-            if (index === 8) {
+            if (index === centerIndex) {
                 element.classList.add("midline");
             }
 
-            if (selectedTeeth.includes(toothNumber)) {
+            if (selectedTeeth.includes(toothIdentifier)) {
                 element.classList.add("selected");
                 element.setAttribute("aria-current", "true");
             }
@@ -289,27 +504,71 @@
             return element;
         }
 
-        function renderArch(containerId, toothNumbers, selectedTeeth) {
+        function renderArch(
+            containerId,
+            toothIdentifiers,
+            selectedTeeth,
+            centerIndex
+        ) {
             const container = document.getElementById(containerId);
 
             if (!container) {
-                throw new Error(`Missing chart container: ${containerId}`);
+                throw new Error(
+                    `Missing chart container: ${containerId}`
+                );
             }
 
-            toothNumbers.forEach((toothNumber, index) => {
+            container.replaceChildren();
+
+            toothIdentifiers.forEach((toothIdentifier, index) => {
                 const tooth = createToothElement(
-                    toothNumber,
+                    toothIdentifier,
                     selectedTeeth,
-                    index
+                    index,
+                    centerIndex
                 );
 
                 container.appendChild(tooth);
             });
         }
 
-        function displaySelectedTeeth(selectedTeeth) {
-            const selectedList =
-                document.getElementById("selected-list");
+        function displayPrimarySelection(selectedTeeth) {
+            const selectedList = document.getElementById(
+                "primary-selected-list"
+            );
+
+            if (!selectedList) {
+                return;
+            }
+
+            if (selectedTeeth.length === 0) {
+                selectedList.textContent = "None selected";
+                return;
+            }
+
+            /*
+             * Display selected letters in natural Universal-system order,
+             * regardless of the order in which they appear in the URL.
+             */
+            const primaryOrder = [
+                ...primaryUpperTeeth,
+                "K", "L", "M", "N", "O",
+                "P", "Q", "R", "S", "T"
+            ];
+
+            const sortedTeeth = [...selectedTeeth].sort(
+                (first, second) =>
+                    primaryOrder.indexOf(first) -
+                    primaryOrder.indexOf(second)
+            );
+
+            selectedList.textContent = sortedTeeth.join(", ");
+        }
+
+        function displayPermanentSelection(selectedTeeth) {
+            const selectedList = document.getElementById(
+                "permanent-selected-list"
+            );
 
             if (!selectedList) {
                 return;
@@ -325,35 +584,140 @@
                 .join(", ");
         }
 
+        function showOrHideSections(
+            parameters,
+            primaryTeeth,
+            permanentTeeth
+        ) {
+            const primarySection = document.getElementById(
+                "primary-section"
+            );
+
+            const permanentSection = document.getElementById(
+                "permanent-section"
+            );
+
+            const noSelectionMessage = document.getElementById(
+                "no-selection-message"
+            );
+
+            const hasPrimaryParameter = parameters.has("primary");
+            const hasPermanentParameter = parameters.has("permanent");
+
+            /*
+             * If no parameters are supplied, show both blank charts so the
+             * page can also function as a general numbering reference.
+             */
+            if (!hasPrimaryParameter && !hasPermanentParameter) {
+                primarySection?.classList.remove("hidden");
+                permanentSection?.classList.remove("hidden");
+
+                if (noSelectionMessage) {
+                    noSelectionMessage.style.display = "block";
+                }
+
+                return;
+            }
+
+            /*
+             * When parameters are supplied, show only the chart types
+             * explicitly included in the URL.
+             */
+            primarySection?.classList.toggle(
+                "hidden",
+                !hasPrimaryParameter
+            );
+
+            permanentSection?.classList.toggle(
+                "hidden",
+                !hasPermanentParameter
+            );
+
+            const hasAnyValidSelection =
+                primaryTeeth.length > 0 ||
+                permanentTeeth.length > 0;
+
+            if (noSelectionMessage) {
+                noSelectionMessage.style.display =
+                    hasAnyValidSelection ? "none" : "block";
+            }
+        }
+
+        function displayError() {
+            const primaryList = document.getElementById(
+                "primary-selected-list"
+            );
+
+            const permanentList = document.getElementById(
+                "permanent-selected-list"
+            );
+
+            if (primaryList) {
+                primaryList.textContent =
+                    "The primary tooth chart could not be displayed.";
+
+                primaryList.classList.add("error");
+            }
+
+            if (permanentList) {
+                permanentList.textContent =
+                    "The permanent tooth chart could not be displayed.";
+
+                permanentList.classList.add("error");
+            }
+        }
+
         function initializeChart() {
             try {
-                const selectedTeeth = readSelectedTeeth();
+                const parameters = new URLSearchParams(
+                    window.location.search
+                );
+
+                const selectedPrimaryTeeth =
+                    readPrimaryTeeth(parameters);
+
+                const selectedPermanentTeeth =
+                    readPermanentTeeth(parameters);
 
                 renderArch(
-                    "upper-arch",
-                    upperTeeth,
-                    selectedTeeth
+                    "primary-upper-arch",
+                    primaryUpperTeeth,
+                    selectedPrimaryTeeth,
+                    5
                 );
 
                 renderArch(
-                    "lower-arch",
-                    lowerTeeth,
-                    selectedTeeth
+                    "primary-lower-arch",
+                    primaryLowerTeeth,
+                    selectedPrimaryTeeth,
+                    5
                 );
 
-                displaySelectedTeeth(selectedTeeth);
+                renderArch(
+                    "permanent-upper-arch",
+                    permanentUpperTeeth,
+                    selectedPermanentTeeth,
+                    8
+                );
+
+                renderArch(
+                    "permanent-lower-arch",
+                    permanentLowerTeeth,
+                    selectedPermanentTeeth,
+                    8
+                );
+
+                displayPrimarySelection(selectedPrimaryTeeth);
+                displayPermanentSelection(selectedPermanentTeeth);
+
+                showOrHideSections(
+                    parameters,
+                    selectedPrimaryTeeth,
+                    selectedPermanentTeeth
+                );
             } catch (error) {
                 console.error(error);
-
-                const selectedList =
-                    document.getElementById("selected-list");
-
-                if (selectedList) {
-                    selectedList.textContent =
-                        "The tooth chart could not be displayed.";
-
-                    selectedList.classList.add("error");
-                }
+                displayError();
             }
         }
 
